@@ -5,7 +5,7 @@ def count(a1, a2):
     return a1+a2
 
 sc = SparkContext(appName="Lab 1 Exercise 2")
-temperature_file = sc.textFile("/user/x_robsl/data/temperature-readings.csv")
+temperature_file = sc.textFile("/user/x_hantu/data/temperature-readings.csv")
 
 # Split lines
 lines = temperature_file.map(lambda line: line.split(";"))
@@ -17,10 +17,12 @@ year_temperature = lines.filter(lambda x: int(x[1][0:4]) >= 1950 and int(x[1][0:
 over_ten = lines.filter(lambda x: float(x[3]) > 10)
 
 # map (year, month) with 1
-over_ten = over_ten.map(lambda x: ((int(x[1][0:4]), int(x[1][5:7])), 1))
+over_ten = over_ten.map(lambda x: ((x[1][0:4] + "-" + x[1][5:7], int(x[0])), 1))
 
 # reduce by adding occurances
 result = over_ten.reduceByKey(count)
 
+new_result = result.map(lambda x: ((int(x[0][0].split("-")[0]), int(x[0][0].split("-")[1])), x[1]))
+
 # write to file
-result.saveAsTextFile("assignment2")
+new_result.saveAsTextFile("assignment2")
