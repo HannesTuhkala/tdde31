@@ -1,34 +1,40 @@
-from time import sleep
 from datetime import datetime
+from functools import reduce
 
 start_time = datetime.now()
 print("Start time: ", start_time)
 
-def max_temperature(a, b):
-    if a >= b:
-        return a
-    else:
-        return b
+max_res = {}
+min_res = {}
 
-def min_temperature(a, b):
-    if a <= b:
-        return a
-    else:
-        return b
+for year in range(1950, 2015):
+    max_res[year] = float("-inf")
+    min_res[year] = float("inf")
 
-with open("/nfshome/hadoop_examples/shared_data/temperature-readings.csv") as temperature_file:
-	lines = map(lambda line: line.split(";"), temperature_file)
-	year_temperature = map(lambda x: (x[1][0:4], (float(x[3]), x[0])), lines)
-	year_temperature = filter(lambda x: int(x[0]) >= 1950 and int(x[0]) <= 2014, year_temperature)
+#with open("/nfshome/hadoop_examples/shared_data/temperature-readings.csv") as temperature_file:
+with open("/home/robin/Documents/tdde31/station_data/temperature-readings.csv") as temperature_file:
+    for line in temperature_file:
+        split = line.split(';')
+        year = int(split[1][0:4])
+        if year <= 1950 or year >= 2014:
+            continue
+        temp_val = float(split[3])
 
-	max_temperatures = year_temperature.reduceByKey(max_temperature)
-	max_temperaturesSorted = max_temperatures.sortBy(ascending = False, keyfunc=lambda k: k[1][0])
-	min_temperatures = year_temperature.reduceByKey(min_temperature)
-	min_temperaturesSorted = min_temperatures.sortBy(ascending = False, keyfunc=lambda k: k[1][0])
+        if max_res[year] < temp_val:
+            max_res[year] = temp_val
+        if min_res[year] > temp_val:
+            min_res[year] = temp_val
 
-	max_temperaturesSorted.saveAsTextFile("max_temperature")
-	min_temperaturesSorted.saveAsTextFile("min_temperature")
+    sorted_max = sorted(max_res.items(), key=lambda i: i[1], reverse=True)
+    sorted_min = sorted(min_res.items(), key=lambda i: i[1], reverse=True)
 
+    max_file = open("max_file.txt", "w")
+    min_file = open("min_file.txt", "w")
+
+    for val in sorted_max:
+        max_file.write(str(val)+"\n")
+    for val in sorted_min:
+        min_file.write(str(val)+"\n")
 
 stop_time = datetime.now()
 print("Stop time: ", stop_time)
