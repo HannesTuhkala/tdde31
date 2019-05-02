@@ -14,6 +14,14 @@ def min_temperature(a, b):
         return b
 
 
+def seq_op(accumulator, element):
+	return accumulator + element[0] + element[1]
+
+
+def comb_op(accumulator1, accumulator2):
+	return accumulator1 + accumulator2
+
+
 sc = SparkContext(appName = "exercise 3")
 temperature_file = sc.textFile("/user/x_hantu/data/temperature-readings.csv")
 lines = temperature_file.map(lambda line: line.split(";"))
@@ -38,13 +46,11 @@ temperatures = temperatures.map(lambda x: ((x[0][0][0:7], x[0][1]), x[1]))
 days = temperatures.countByKey().items()
 ndays = sc.parallelize(days)
 
-# ((year-month, stationnumber), (max_temp, min_temp)).
-# Trying to sum up max_temp with min_temp for each day in a month, but it fails. Not sure what I'm doing wrong here.
-# Output should be ((year-month, stationnumber), avg_temp)
-average_temp = temperatures.reduceByKey(lambda x, y: (x[0] + x[1] + y[0] + y[1]))
-
-# Todo: Divide each average_temp with the corresponding month in ndays. ndays and average_temp has the same keys.
+# Calculates the sum of all max and min temp values.
+average_temp = temperatures.aggregateByKey(0, seq_op, comb_op)
+average_temp = average_temp.join(ndays)
 
 # Maps average_temp to this structure and saves it: (year, month, station number, average monthly temperature)
-output_temps = average_temp.map(lambda x: (x[0][0][0:4], x[0][0][5:7], x[0][1], x[1]))
-output_temps.saveAsTextFile("avg_temp8")
+output_temps = average_temp.map(lambda x: (int(x[0][0][0:4]), int(x[0][0][5:7]), int(x[0][1]), round(x[1][0]/(2*x[1][1]), 1)))
+output_temps = output_temps.sortBy(ascending = True, keyfunc = lambda k: (k[0], k[1], k[2]))
+output_temps.saveAsTextFile("avg_temp")
