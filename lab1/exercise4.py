@@ -1,6 +1,6 @@
 from pyspark import SparkContext
-temp_file = "/user/x_hantu/data/temperature-readings.csv"
-prec_file = "/user/x_hantu/data/precipitation-readings.csv"
+temp_file = "/user/x_robsl/data/temperature-readings.csv"
+prec_file = "/user/x_robsl/data/precipitation-readings.csv"
 
 
 def max_temperature(temp):
@@ -32,7 +32,7 @@ temp_lines = temperature_file.map(lambda line: line.split(";"))
 # Creates a tuple as (stationnumber, max_temp)
 year_temperature = temp_lines.map(lambda x: (x[0], float(x[3])))
 # Removes all tuples that do not satisfy max_temperature
-max_temp = year_temperature.reduceByKey(max_temperature)
+max_temp = year_temperature.filter(max_temperature)
 
 
 precipitation_file = sc.textFile(prec_file)
@@ -40,10 +40,10 @@ prec_lines = precipitation_file.map(lambda line: line.split(";"))
 # Creates a tuple as (stationnumber, max_prec)
 year_prec = prec_lines.map(lambda x: (x[0], float(x[3])))
 # Removes all tuples that do not satisfy max_precipitation
-max_prec = year_prec.reduceByKey(max_precipitation)
+max_prec = year_prec.filter(max_precipitation)
 
 # Combine the two tuples into (number, max_temp, max_prec)
 # We have to use an existing function to be able to map using their data objects
 # look at https://spark.apache.org/docs/latest/rdd-programming-guide.html#transformations
-result = combine(max_temp, max_prec)
+result = max_temp.join(max_prec)
 result.saveAsTextFile("max_temp_prec")
