@@ -1,17 +1,17 @@
 from pyspark import SparkContext
-STAT_FILE = "/users/x_robsl/data/stations-Ostergotland.csv"
-PREC_FILE = "/users/x_robsl/data/precipitation-readings.csv"
+STAT_FILE = "/users/x_hantu/data/stations-Ostergotland.csv"
+PREC_FILE = "/users/x_hantu/data/precipitation-readings.csv"
 
 sc = SparkContext(appName = "exercise 5")
 
-def max_temperature(a, b):
+def max_precipitation(a, b):
     if a >= b:
         return a
     else:
         return b
 
 
-def min_temperature(a, b):
+def min_precipitation(a, b):
     if a <= b:
         return a
     else:
@@ -40,8 +40,8 @@ prec_data.filter(lambda x: x[0] in stat_lines[0])
 prec_data.map(lambda x: (x[1][0], x[1][1]))
 
 # Only save tuples that has the max and min temperatures for that day
-max_day_precipitations = prec_data.reduceByKey(max_temperature)
-min_day_precipitations = prec_data.reduceByKey(min_temperature)
+max_day_precipitations = prec_data.reduceByKey(max_precipitation)
+min_day_precipitations = prec_data.reduceByKey(min_precipitation)
 
 # Combine max and min into the following tuple (key, (max_temp, min_temp))
 precipitations = max_day_precipitations.join(min_day_precipitations)
