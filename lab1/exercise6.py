@@ -53,7 +53,6 @@ temp_data = temp_data.map(lambda x: ((x[0][0], x[0][1][0:7]), x[1]))
 days = temp_data.countByKey().items()
 ndays = sc.parallelize(days)
 
-
 # Sum all days in a month
 average_temp = temp_data.aggregateByKey(0, seq_op, comb_op)
 
@@ -64,20 +63,28 @@ average_temp = average_temp.join(ndays)
 average_temp = average_temp.map(lambda x: (x[0], float(x[1][0]/(2*x[1][1]))))
 
 # Calculate the average over stations
+# Structure: (year-month, (avg_temp, #stations))
 average_temp = average_temp.map(lambda x: (x[0][1], (x[1], 1)))
 average_temp = average_temp.reduceByKey(lambda v1, v2: (v1[0] + v2[0], v1[1] + v2[1]))
-average_temp = average_temp.map(lambda x: (x[0], x[1][0]/x[1][1]))
-
+# Structure: (year-month, avg_temp)
+average_temp = average_temp.map(lambda x: (x[0], float(x[1][0]/x[1][1])))
 
 new_temp = average_temp.filter(lambda x: int(x[0][0:4]) <= 1980)
 # Structure: (month, avg_temp)
 new_temp = new_temp.map(lambda x: (x[0][5:7], x[1]))
 
 YEAR_PERIOD = 30
-new_temp = new_temp.aggregateByKey(0, seq_op, comb_op)
+
+new_temp = new_temp.aggregateByKey(0, lambda acc, ele: acc + ele, comb_op)
 new_temp = new_temp.map(lambda x: (x[0], round(x[1]/YEAR_PERIOD), 1)).collect()
 
-diff_temp = average_temp.map(lambda x: (x[0], (x[1] - new_temp[x[0][5:7]])))
+def get_month_temp(x, match):
+	for element in x:
+		if int(element[0]) == match:
+			return element[1]
 
-output_precs = temp_data.sortBy(ascending = True, keyfunc = lambda k: k[0])
+#diff_temp = average_temp.map(lambda x: (x[0], (float(x[1]) - float(new_temp[int(x[0][5:7])]))))
+diff_temp = average_temp.map(lambda x: (x[0], round(float(x[1]) - get_month_temp(new_temp, int(x[0][5:7])))))
+
+output_precs = diff_temp.sortBy(ascending = True, keyfunc = lambda k: k[0])
 output_precs.saveAsTextFile("long_term_diff")
