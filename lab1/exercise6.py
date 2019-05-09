@@ -83,8 +83,7 @@ def get_month_temp(x, match):
 		if int(element[0]) == match:
 			return element[1]
 
-#diff_temp = average_temp.map(lambda x: (x[0], (float(x[1]) - float(new_temp[int(x[0][5:7])]))))
-diff_temp = average_temp.map(lambda x: (x[0], round(float(x[1]) - get_month_temp(new_temp, int(x[0][5:7])))))
+diff_temp = average_temp.map(lambda x: (x[0], round(float(x[1]) - get_month_temp(new_temp, int(x[0][5:7])), 2)))
 
 output_precs = diff_temp.sortBy(ascending = True, keyfunc = lambda k: k[0])
 output_precs.saveAsTextFile("long_term_diff")
