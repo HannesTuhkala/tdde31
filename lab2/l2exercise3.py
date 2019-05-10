@@ -21,10 +21,6 @@ min_readings = schemaTempReadings.groupBy(['year', 'month', 'day', 'station']).a
 
 min_max_readings = max_readings.join(min_readings, ['year', 'month', 'day', 'station'], 'inner')
 
-min_max_readings = min_max_readings.withColumn('daily_values', min_max_readings.max_temp + min_max_readings.min_temp).select('*').show()
+min_max_readings = min_max_readings.withColumn('daily_average', (min_max_readings.max_temp + min_max_readings.min_temp)/2)
 
-
-# min_max_readings = min_max_readings.groupBy(['year', 'month', 'station']).distinct().withColumn()
-
-
-# max_temperatures = max_temperatures.join(valid_temperatures, ['year', 'value'], 'inner').select('year', 'station', 'value')
+monthly_average = min_max_readings.groupBy(['year', 'month', 'station']).agg(F.avg('daily_average').alias('avg_monthly_temp')).select('year', 'month', 'station', 'avg_monthly_temp').show()
