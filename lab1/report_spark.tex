@@ -76,11 +76,175 @@
 \section{Introduction}
 
 \section{Exercise 1}
+\subsection{a)}
+\begin{tabular}{l | l}
+\bf Lowest temperatures & \bf Highest temperatures \\ 
+(Year, (Temperature, Station)) & (Year, (Temperature, Station)) \\
+\hline
+(u'1990', (-35.0, u'147270')) & (u'1975', (36.1, u'86200')) \\ 
+(u'1952', (-35.5, u'192830')) & (u'1992', (35.4, u'63600')) \\ 
+(u'1974', (-35.6, u'166870')) & (u'1994', (34.7, u'117160')) \\
+(u'1954', (-36.0, u'113410')) & (u'2010', (34.4, u'75250')) \\
+(u'1992', (-36.1, u'179960')) & (u'2014', (34.4, u'96560')) \\
+(u'1975', (-37.0, u'157860')) & (u'1989', (33.9, u'63050')) \\
+(u'1972', (-37.5, u'167860')) & (u'1982', (33.8, u'94050')) \\
+(u'2000', (-37.6, u'169860')) & (u'1968', (33.7, u'137100')) \\
+(u'1995', (-37.6, u'182910')) & (u'1966', (33.5, u'151640')) \\
+(u'1957', (-37.8, u'159970')) & (u'1983', (33.3, u'98210')) \\
+... & ... \\
+(u'1965', (-44.0, u'189780')) & (u'1993', (29.7, u'132030')) \\
+(u'1986', (-44.2, u'167860')) & (u'1987', (29.6, u'98210')) \\
+(u'1971', (-44.3, u'166870')) & (u'1984', (29.5, u'105370')) \\
+(u'1956', (-45.0, u'160790')) & (u'1967', (29.5, u'75040')) \\
+(u'1980', (-45.0, u'191900')) & (u'1950', (29.4, u'75040')) \\
+(u'1967', (-45.4, u'166870')) & (u'1960', (29.4, u'173810')) \\
+(u'1987', (-47.3, u'123480')) & (u'1998', (29.2, u'63600')) \\
+(u'1978', (-47.7, u'155940')) & (u'1965', (28.5, u'116500')) \\
+(u'1999', (-49.0, u'192830')) & (u'1951', (28.5, u'75040')) \\
+(u'1966', (-49.4, u'179950')) & (u'1962', (27.4, u'86200')) \\
+\end{tabular}
 
+\subsection{b)}
 The total elapsed time for the first time is 4 min and 29 seconds using pyspark.
 The second time it ran it took 2 min 13 seconds.
 
-'Locally' on heffa it took 3 min 50 seconds. On Robin's laptop it took 2 min 43 sec.
+'Locally' on Heffa it took 3 min 50 seconds. On Robin's laptop it took 2 min 43
+sec.
+
+The time differences are because of the way Heffa works where jobs have to be
+scheduled and then executed when it is time for that specific job to execute.
+All this overhead makes the total time longer than running it locally on a
+computer.
+
+\section{Exercise 2}
+\begin{tabular}{l | l}
+\bf Readings each month & \bf Distinct for each station \\ 
+((Year, Month), Count) & ((Year, Month), Count) \\
+\hline
+((2009, 5), 60867) & ((1972, 5), 13)  \\ 
+((1980, 10), 7079) & ((1978, 5), 49)  \\ 
+((2008, 6), 102900)& ((1994, 5), 98)  \\
+((1956, 2), 3)     & ((2005, 5), 300) \\
+((1949, 9), 4939)  & ((2008, 8), 173) \\
+((1981, 9), 37266) & ((1994, 7), 244) \\
+((1989, 1), 72)    & ((1988, 6), 57)  \\
+((1961, 5), 16470) & ((1975, 11), 2)  \\
+((2002, 8), 126073)& ((2009, 9), 632) \\
+((2014, 4), 19862) & ((1990, 7), 104) \\
+... & ... \\
+((1942, 5), 37)   & ((1973, 10), 15) \\
+((1989, 8), 67793)& ((2004, 5), 341) \\
+((2010, 9), 74816)& ((1966, 7), 84)  \\
+((1941, 8), 215)  & ((1995, 10), 74) \\
+((1983, 10), 11157& ((1981, 11), 2)  \\
+((1990, 5), 34339)& ((1966, 10), 40) \\
+((1954, 1), 3)    & ((2006, 7), 729) \\
+((1962, 9), 24977)& ((1958, 8), 65)  \\
+((1948, 3), 22)   & ((1990, 11), 18) \\
+((1958, 5), 9076) & ((2005, 6), 417) \\
+\end{tabular}
+
+\section{Exercise 3}
+\begin{tabular}{l}
+\bf Average monthly temperature for each station in Sweden \\ 
+(Year, Month, Station, Average monthly temperature) \\
+\hline
+(1960, 1, 52230, -0.2) \\ 
+(1960, 1, 53200, -0.7) \\ 
+(1960, 1, 53260, -0.8) \\
+(1960, 1, 53360, 0.4)  \\
+(1960, 1, 53370, -0.4) \\
+(1960, 1, 53650, -1.9) \\
+(1960, 1, 54330, 0.2)  \\
+(1960, 1, 55570, -0.1) \\
+(1960, 1, 62180, -1.8) \\
+(1960, 1, 62190, -0.6) \\
+... \\
+(2014, 12, 182910, -10.0) \\
+(2014, 12, 182930, -9.8)  \\
+(2014, 12, 183750, -9.6)  \\
+(2014, 12, 188800, -6.9)  \\
+(2014, 12, 188820, -7.5)  \\
+(2014, 12, 188850, -7.6)  \\
+(2014, 12, 189720, -10.1) \\
+(2014, 12, 191720, -11.9) \\
+(2014, 12, 191910, -11.6) \\
+(2014, 12, 192840, -11.8) \\
+\end{tabular}
+
+\section{Exercise 4}
+\begin{tabular}{l}
+  \bf Maximum temperatures and maximum measured daily precipitation \\
+  \bf for each station. Showing only stations with maximum temperature \\
+  \bf between 25 and 30 degrees and maximum daily precipitation between \\
+  \bf 100mm and 200mm. \\
+(Station, Maximum measured temperature, Maximum daily precipitation) \\
+\hline
+The results where empty \\ 
+\end{tabular}
+
+\section{Exercise 5}
+\begin{tabular}{l}
+\bf Average monthly precipitation for stations in Östergötland. \\ 
+(Year, Month, Station, Average monthly precipitation) \\
+\hline
+(1960, 1, 52230, -0.2) \\ 
+(1960, 1, 53200, -0.7) \\ 
+(1960, 1, 53260, -0.8) \\
+(1960, 1, 53360, 0.4)  \\
+(1960, 1, 53370, -0.4) \\
+(1960, 1, 53650, -1.9) \\
+(1960, 1, 54330, 0.2)  \\
+(1960, 1, 55570, -0.1) \\
+(1960, 1, 62180, -1.8) \\
+(1960, 1, 62190, -0.6) \\
+... \\
+(2014, 12, 182910, -10.0) \\
+(2014, 12, 182930, -9.8)  \\
+(2014, 12, 183750, -9.6)  \\
+(2014, 12, 188800, -6.9)  \\
+(2014, 12, 188820, -7.5)  \\
+(2014, 12, 188850, -7.6)  \\
+(2014, 12, 189720, -10.1) \\
+(2014, 12, 191720, -11.9) \\
+(2014, 12, 191910, -11.6) \\
+(2014, 12, 192840, -11.8) \\
+\end{tabular}
+
+\section{Exercise 6}
+\begin{tabular}{l}
+  \bf Difference between average monthly temperature in period 1950-2014 \\
+  \bf and long-term monthly averages in period 1950-1980, for stations in \\
+  \bf Östergötland. Plotted in figure \ref{diffplot}. \\ 
+(Year-Month, Difference) \\
+\hline
+  (u'1950-01', -2.23) \\ 
+  (u'1950-02', 2.52)  \\ 
+  (u'1950-03', 2.84)  \\
+  (u'1950-04', 1.08)  \\
+  (u'1950-05', 0.3)   \\
+  (u'1950-06', -0.64) \\
+  (u'1950-07', -1.55) \\
+  (u'1950-08', -0.67) \\
+  (u'1950-09', 0.15)  \\
+  (u'1950-10', -0.26) \\
+  ... \\
+  (u'2014-03', 4.83)  \\
+  (u'2014-04', 1.54)  \\
+  (u'2014-05', -0.42) \\
+  (u'2014-06', -2.23) \\
+  (u'2014-07', 2.03)  \\
+  (u'2014-08', -1.56) \\
+  (u'2014-09', -0.13) \\
+  (u'2014-10', 1.73)  \\
+  (u'2014-11', 2.38)  \\
+  (u'2014-12', 0.86)  \\
+\end{tabular}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{exercise6plot.png}
+  \caption{Plot of the differences.}
+  \label{diffplot}
+\end{figure}
 
 \end{document}
-
