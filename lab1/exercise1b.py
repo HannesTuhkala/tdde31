@@ -1,17 +1,19 @@
 from datetime import datetime
-from functools import reduce
 
+# Start the timer
 start_time = datetime.now()
 print("Start time: ", start_time)
 
+# Dictionaries to store max and min values
 max_res = {}
 min_res = {}
 
+# Add the period 1950-2014 to the min and max dictionaries
 for year in range(1950, 2015):
     max_res[year] = float("-inf")
     min_res[year] = float("inf")
 
-#with open("/nfshome/hadoop_examples/shared_data/temperature-readings.csv") as temperature_file:
+# Find the maximum and minimum temperatures for each year
 with open("/home/robin/Documents/tdde31/station_data/temperature-readings.csv") as temperature_file:
     for line in temperature_file:
         split = line.split(';')
@@ -31,13 +33,16 @@ with open("/home/robin/Documents/tdde31/station_data/temperature-readings.csv") 
     max_file = open("max_file.txt", "w")
     min_file = open("min_file.txt", "w")
 
+    # Write result to file
     for val in sorted_max:
         max_file.write(str(val)+"\n")
     for val in sorted_min:
         min_file.write(str(val)+"\n")
 
+# Stop timer
 stop_time = datetime.now()
 print("Stop time: ", stop_time)
 
+# Calculate time it took to execute
 elapsed_time = stop_time - start_time
 print("Elapsed time: ", elapsed_time)

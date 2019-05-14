@@ -1,5 +1,6 @@
 from pyspark import SparkContext
 
+
 def max_temperature(a, b):
     if a >= b:
         return a
@@ -15,11 +16,11 @@ def min_temperature(a, b):
 
 
 def seq_op(accumulator, element):
-	return accumulator + element[0] + element[1]
+    return accumulator + element[0] + element[1]
 
 
 def comb_op(accumulator1, accumulator2):
-	return accumulator1 + accumulator2
+    return accumulator1 + accumulator2
 
 
 sc = SparkContext(appName = "exercise 3")

@@ -10,7 +10,6 @@ ostg_stations = stations_file.map(lambda line: line.split(";")[0]).collect()
 precipitations_file = sc.textFile(PREC_FILE)
 prec_data = precipitations_file.map(lambda line: line.split(";"))
 
-# data: (station_number, (year-month-day, precipitation))
 # Filter out the data outside the wanted dates
 prec_data = prec_data.filter(lambda x: int(x[1][0:4]) >= 1993 and int(x[1][0:4]) <= 2016)
 
@@ -23,7 +22,6 @@ prec_data = prec_data.map(lambda x: (x[0] + ";" + x[1][0:7], float(x[3])))
 prec_data = prec_data.reduceByKey(lambda val1, val2: val1 + val2)
 
 # We remove the stationnumber, since it is not required anymore
-# New structure: (year-month, (value, 1))
 # The last 1 in the tuple is just used to track the amount of stations to
 # divide with in the end.
 prec_data = prec_data.map(lambda x: (x[0].split(';')[1], (x[1], 1)))
@@ -32,7 +30,6 @@ prec_data = prec_data.reduceByKey(lambda val1, val2: (val1[0] + val2[0], val1[1]
 # Divide the total monthly value to get average
 prec_data = prec_data.map(lambda x: (x[0], x[1][0]/x[1][1]))
 
-## Maps average_temp to this structure and saves it: (year, month, station number, average monthly temperature)
-
+# Sort and save
 output_precs = prec_data.sortBy(ascending = True, keyfunc = lambda k: (k[0], k[1]))
 output_precs.saveAsTextFile("avg_prec")

@@ -10,16 +10,23 @@ tempReadings = lines.map(lambda p: Row(station=int(p[0]), year=int(p[1].split("-
 schemaTempReadings = sqlContext.createDataFrame(tempReadings)
 schemaTempReadings.registerTempTable("tempReadings")
 
-#max_temperatures = sqlContext.sql("SELECT year, station, max(value) as value FROM tempReadings WHERE year >= 1950 and year <= 2014 GROUP BY year ORDER BY value DESC")
+# Filter out readings outside of wanted period
 valid_temperatures = schemaTempReadings.where("year >= 1950 and year <= 2014")
+
+# Find max values
 max_temperatures = valid_temperatures.groupBy('year').agg(F.max('value').alias('value'))
 max_temperatures = max_temperatures.join(valid_temperatures, ['year', 'value'], 'inner').select('year', 'station', 'value')
+# Order the max values
 max_temperatures = max_temperatures.orderBy('value', ascending=False)
 max_temperatures = max_temperatures.rdd
+
+# Write to file
 max_temperatures.saveAsTextFile("lab2_max_temperature")
 
+# Find min values
 min_temperatures = valid_temperatures.groupBy('year').agg(F.min('value').alias('value'))
 min_temperatures = min_temperatures.join(valid_temperatures, ['year', 'value'], 'inner').select('year', 'station', 'value')
+# Order the min values
 min_temperatures = min_temperatures.orderBy('value', ascending=False)
 min_temperatures = min_temperatures.rdd
 min_temperatures.saveAsTextFile("lab2_min_temperature")

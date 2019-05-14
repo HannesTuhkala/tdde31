@@ -1,6 +1,7 @@
 from pyspark import SparkContext
 
 
+# Function to add two values
 def count(a1, a2):
     return a1+a2
 

@@ -13,17 +13,17 @@ def max_precipitation(prec):
 
 # Find the value of tuple b with the "key" key.
 def getItem(key, b):
-	for item in b:
-		if item[0] == key:
-			return item[1]
+    for item in b:
+        if item[0] == key:
+            return item[1]
 
 
 # Combines the two tuples into one as (number, max_temp, max_prec)
 def combine(a, b):
-	result = []
-	for item in a:
-		if (item[0] in [i[0] for i in b]):
-			result += [item[0], item[1], getItem(item[0], b)]
+    result = []
+    for item in a:
+        if (item[0] in [i[0] for i in b]):
+            result += [item[0], item[1], getItem(item[0], b)]
 
 
 sc = SparkContext(appName = "exercise 4")
