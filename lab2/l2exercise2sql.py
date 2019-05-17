@@ -10,7 +10,4 @@ tempReadings = lines.map(lambda p: Row(station=int(p[0]), year=int(p[1].split("-
 schemaTempReadings = sqlContext.createDataFrame(tempReadings)
 schemaTempReadings.registerTempTable("tempReadings")
 
-max_temperatures = sqlContext.sql("SELECT year, month, COUNT(DISTINCT station) as count FROM tempReadings WHERE year >= 1950 and year <= 2014 and value > 10 GROUP BY year, month ORDER BY count DESC")
-
-max_temperatures = max_temperatures.rdd
-max_temperatures.saveAsTextFile("lab2_10")
+max_temperatures = sqlContext.sql("SELECT year, month, COUNT(DISTINCT station) as count FROM tempReadings WHERE year >= 1950 and year <= 2014 and value > 10 GROUP BY year, month ORDER BY count DESC").show()

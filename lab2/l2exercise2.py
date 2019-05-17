@@ -21,7 +21,4 @@ max_temperatures = schemaTempReadings.where('year >= 1950 and year <= 2014 and v
 
 # Once per station
 station_count = max_temperatures.select('year', 'month', 'station').distinct().groupBy(['year', 'month'])
-station_count = station_count.count().orderBy(['count'], ascending=False)
-
-station_count = station_count.rdd
-station_count.saveAsTextFile("lab2_e2")
+station_count = station_count.count().orderBy(['count'], ascending=False).show()

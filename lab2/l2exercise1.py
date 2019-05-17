@@ -27,8 +27,6 @@ max_temperatures.saveAsTextFile("lab2_max_temperature")
 min_temperatures = valid_temperatures.groupBy('year').agg(F.min('value').alias('value'))
 min_temperatures = min_temperatures.join(valid_temperatures, ['year', 'value'], 'inner').select('year', 'station', 'value')
 # Order the min values
-min_temperatures = min_temperatures.orderBy('value', ascending=False)
-min_temperatures = min_temperatures.rdd
-min_temperatures.saveAsTextFile("lab2_min_temperature")
+min_temperatures = min_temperatures.orderBy('value', ascending=False).show()
 
 
