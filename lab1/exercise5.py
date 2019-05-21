@@ -18,7 +18,7 @@ prec_data = prec_data.filter(lambda x: x[0] in ostg_stations)
 
 # map data like: (station_number;year-month, value)
 prec_data = prec_data.map(lambda x: (x[0] + ";" + x[1][0:7], float(x[3])))
-# calculate monthly precipitation for each station
+# calculate total monthly precipitation for each station
 prec_data = prec_data.reduceByKey(lambda val1, val2: val1 + val2)
 
 # We remove the stationnumber, since it is not required anymore
