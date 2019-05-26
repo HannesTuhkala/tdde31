@@ -63,23 +63,30 @@ a_lat = 58.4274  # Up to you
 b_lon = 14.826  # Up to you
 date = "2013-07-04"  # Up to you
 
+
 station_file = sc.textFile("/user/x_hantu/data/stations.csv")
 temp_file = sc.textFile("/user/x_hantu/data/temperature-readings.csv").sample(False, 0.1)
 
 stations = station_file.map(lambda line: line.split(";"))
-stations = stations.map(lambda x: [(int(x[0]), float(x[3]), float(x[4]))]).cache()
+stations = stations.map(lambda x: [(int(x[0]), float(x[3]), float(x[4]))])
 
+print("ROBIN")
 temperatures = temp_file.map(lambda line: line.split(";"))
 # Remove all future dates
-temperatures = temperatures.reduce(lambda x: x[1] < date).cache()
-temperatures = temperatures.map(lambda x: [(int(x[0]), x[1], x[2], float(x[3]))]).cache()
+temperatures = temperatures.filter(lambda x: str(x[1]) < date)
+print("MEEEEEEEEEEE")
+temperatures = temperatures.map(lambda x: [(int(x[0]), x[1], x[2], float(x[3]))])
 
-hav_map = sc.broadcast(stations.map(lambda x: [(x[0], haversine(x[2], x[1], b_lon, a_lat))]).collectAsMap())
+print("HOLA")
+
+# Structure: 
+#hav_map = sc.broadcast(stations.map(lambda x: [(x[0], haversine(x[2], x[1], b_lon, a_lat))]).collectAsMap())
+hav_map = stations.map(lambda x: [(x[0], haversine(x[2], x[1], b_lon, a_lat))]).collectAsMap()
 
 print("YESSSSSSSSSSSSSSS")
 
 # Structure: (station, km, days, time, temp)
-temperatures = temperatures.map(lambda x: [(x[0], hav_map[x[0]], day_differences(date, x[1]), x[2], x[3])]).cache()
+temperatures = temperatures.map(lambda x: [(x[0], hav_map[x[0]], day_differences(date, x[1]), x[2], x[3])])
 
 print("I GOT HERE MF")
 
@@ -87,11 +94,11 @@ forecast = []
 # For every other hour between 4 and 24..
 for i in range(4, 25, 2):
 	# Structure (i, value)
-	forecast1 = temperatures.map(lambda x: [(i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i))*x[4])]).reduce(lambda x, y: (x[1] + y[1]))
-	forecast2 = temperatures.map(lambda x: [(i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i)))]).reduce(lambda x, y: (x[1] + y[1]))
+	forecast1 = temperatures.map(lambda x: [(i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i))*x[4])]).reduceByKey(lambda x, y: x + y)
+	forecast2 = temperatures.map(lambda x: [(i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i)))]).reduceByKey(lambda x, y: x + y)
 	forecast += [(date, a_lat, b_lon, i, forecast1[1] / forecast2[1])]
 
-print("FUCK U")
+print("FUUUUU")
 forecast = sc.parallelize(forecast)
 forecast.saveAsTextFile("forecast")
 
