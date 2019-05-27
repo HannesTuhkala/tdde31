@@ -25,4 +25,4 @@ min_max_readings = max_readings.join(min_readings, ['year', 'month', 'day', 'sta
 min_max_readings = min_max_readings.withColumn('daily_average', (min_max_readings.max_temp + min_max_readings.min_temp)/2)
 
 # Calculate the monthly average
-monthly_average = min_max_readings.groupBy(['year', 'month', 'station']).agg(F.avg('daily_average').alias('avg_monthly_temp')).select('year', 'month', 'station', 'avg_monthly_temp').show()
+monthly_average = min_max_readings.groupBy(['year', 'month', 'station']).agg(F.avg('daily_average').alias('avg_monthly_temp')).select('year', 'month', 'station', 'avg_monthly_temp').orderBy(['avg_monthly_temp'], ascending=False).show()

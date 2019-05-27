@@ -54,4 +54,4 @@ long_term_monthly = long_term_monthly.groupBy(['month']).agg(F.avg('avg_monthly_
 average_diff = long_term_monthly.join(monthly_average, ['month'], 'inner')
 
 # Calculate the difference
-average_diff = average_diff.withColumn('avg_diff', average_diff.avg_monthly_temp - average_diff.long_term_average).select('year', 'month', 'avg_diff').show()
+average_diff = average_diff.withColumn('avg_diff', average_diff.avg_monthly_temp - average_diff.long_term_average).select('year', 'month', 'avg_diff').orderBy(['year', 'month'], ascending=False).show()
