@@ -29,15 +29,15 @@ def day_differences(pred_date, prev_date):
 
 
 def time_differences(pred_time, prev_time):
-	# Convert to seconds
+	# Convert time difference to seconds
 	t1_hour = int(pred_time.split(":")[0]) * 3600
 	t2_hour = prev_time * 3600
 	return abs(t2_hour - t1_hour)
 
 
 def gauss_kernel_sum(in_dist, in_date, in_time):
-    return gauss_kernel_dist(in_dist) + \
-            gauss_kernel_date(in_date) + \
+    return gauss_kernel_dist(in_dist) * \
+            gauss_kernel_date(in_date) * \
             gauss_kernel_time(in_time)
 
 
@@ -61,7 +61,7 @@ h_time = 6*3600  # In seconds
 # Variables for prediction
 a_lat = 58.4274  # Up to you
 b_lon = 14.826  # Up to you
-date = "2013-07-04"  # Up to you
+date = "2013-12-24"  # Up to you
 
 
 station_file = sc.textFile("/user/x_hantu/data/stations.csv")
@@ -73,28 +73,27 @@ stations = stations.map(lambda x: (int(x[0]), float(x[3]), float(x[4]))).cache()
 temperatures = temp_file.map(lambda line: line.split(";"))
 # Remove all future dates
 temperatures = temperatures.filter(lambda x: x[1] < date)
+
+# Structure: (station, date, time, value)
 temperatures = temperatures.map(lambda x: (int(x[0]), x[1], x[2], float(x[3])))
 
 
-# Structure: 
-#hav_map = sc.broadcast(stations.map(lambda x: [(x[0], haversine(x[2], x[1], b_lon, a_lat))]).collectAsMap())
-hav_map = stations.map(lambda x: (x[0], haversine(x[2], x[1], b_lon, a_lat))).collectAsMap()
+# Structure: (station, km_difference)
+hav_map = sc.broadcast(stations.map(lambda x: (x[0], haversine(x[2], x[1], b_lon, a_lat))).collectAsMap())
 
 
-# Structure: (station, km, days, time, temp)
-temperatures = temperatures.map(lambda x: (x[0], hav_map[x[0]], day_differences(date, x[1]), x[2], x[3])).cache()
+# Structure: (station, km_difference, days, time, temp)
+temperatures = temperatures.map(lambda x: (x[0], hav_map.value[x[0]], day_differences(date, x[1]), x[2], x[3])).cache()
 
 
 forecast = []
-# For every other hour between 4 and 24..
+# For every other hour between 4 am and 12 am..
 for i in range(4, 25, 2):
 	# Structure (i, value)
 	forecast1 = temperatures.map(lambda x: (i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i))*x[4])).reduceByKey(lambda x, y: x + y).cache().collect()
+        # Structure (i, value)
 	forecast2 = temperatures.map(lambda x: (i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i)))).reduceByKey(lambda x, y: x + y).cache().collect()
-	#forecast += [(date, a_lat, b_lon, i, forecast1[1] / forecast2[1])]
-	date_time = date + ' {:02d}:{:02d}'.format(i, 0)
+	
+        # Make the date/time prettier and output it into console
+        date_time = date + ' {:02d}:{:02d}'.format(i, 0)
 	print(date_time, a_lat, b_lon, round(forecast1[0][1] / forecast2[0][1], 2))
-
-#forecast = sc.parallelize(forecast)
-#forecast.saveAsTextFile("forecast")
-
