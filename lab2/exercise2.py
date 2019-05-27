@@ -13,12 +13,5 @@ schemaTempReadings.registerTempTable("tempReadings")
 
 max_temperatures = schemaTempReadings.where('year >= 1950 and year <= 2014 and value > 10')
 
-#max_temperatures = max_temperatures.groupBy(['year', 'month'])
-
-# For each month
-#month_count = max_temperatures.count()
-#month_count = month_count.orderBy(['count'], ascending=False)
-
-# Once per station
 station_count = max_temperatures.select('year', 'month', 'station').distinct().groupBy(['year', 'month'])
 station_count = station_count.count().orderBy(['count'], ascending=False).show()

@@ -10,4 +10,5 @@ tempReadings = lines.map(lambda p: Row(station=int(p[0]), year=int(p[1].split("-
 schemaTempReadings = sqlContext.createDataFrame(tempReadings)
 schemaTempReadings.registerTempTable("tempReadings")
 
+# Do the actual query
 max_temperatures = sqlContext.sql("SELECT year, month, COUNT(DISTINCT station) as count FROM tempReadings WHERE year >= 1950 and year <= 2014 and value > 10 GROUP BY year, month ORDER BY count DESC").show()

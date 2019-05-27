@@ -16,7 +16,9 @@ precReadings = prec_lines.map(lambda p: Row(station=int(p[0]), year=int(p[1][0:4
 schemaPrecReadings = sqlContext.createDataFrame(precReadings)
 schemaPrecReadings.registerTempTable("precReadings")
 
+# Filter data
 valid_precipitations = schemaPrecReadings.where("year >= 1993 and year <= 2016")
+# Join stations with the data
 precipitations = valid_precipitations.join(schemaStatReadings, 'station', 'inner')
 
 precipitations = precipitations.groupBy('year', 'month', 'station').agg(F.sum('prec').alias('prec'))

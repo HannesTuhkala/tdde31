@@ -32,7 +32,7 @@ valid_readings = valid_readings.join(schema_stations, ['station'], 'inner').sele
 # Get max temperatures per day per station
 max_readings = valid_readings.groupBy(['year', 'month', 'day', 'station']).agg(F.max('temp').alias('max_temp'))
 
-# Get min temeprature per day per station
+# Get min temperature per day per station
 min_readings = valid_readings.groupBy(['year', 'month', 'day', 'station']).agg(F.min('temp').alias('min_temp'))
 
 # Join the max and min

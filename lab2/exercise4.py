@@ -16,10 +16,11 @@ precReadings = prec_lines.map(lambda p: Row(station=int(p[0]), year=int(p[1][0:4
 schemaPrecReadings = sqlContext.createDataFrame(precReadings)
 schemaPrecReadings.registerTempTable("precReadings")
 
+# Filter temperatures
 valid_temperatures = schemaTempReadings.where("year >= 1960 and year <= 2014 and temp >= 25.0 and temp <= 30.0")
-#max_temperatures = valid_temperatures.groupBy('station')
+
+# Filter precipitations
 valid_precipitations = schemaPrecReadings.where("year >= 1960 and year <= 2014 and prec >= 100.0 and prec <= 200.0")
-#max_precipitations = valid_precipitations.groupBy('station')
 
 max_stations = valid_temperatures.join(valid_precipitations, ['station'], 'inner').select('station', 'temp', 'prec')
 max_stations = max_stations.orderBy('station', ascending=False)

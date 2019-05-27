@@ -16,7 +16,7 @@ schemaTempReadings = schemaTempReadings.where('year >= 1960 and year <= 2014')
 # Get max temperatures per day per station
 max_readings = schemaTempReadings.groupBy(['year', 'month', 'day', 'station']).agg(F.max('value').alias('max_temp'))
 
-# Get min temeprature per day per station
+# Get min temperature per day per station
 min_readings = schemaTempReadings.groupBy(['year', 'month', 'day', 'station']).agg(F.min('value').alias('min_temp'))
 
 min_max_readings = max_readings.join(min_readings, ['year', 'month', 'day', 'station'], 'inner')
