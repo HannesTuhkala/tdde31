@@ -83,37 +83,42 @@ Our h\_ variables are set to values that would favor closer points of data. h\_d
 
 \textbf{It is quite likely that the predicted temperatures do not differ much from one another. Do you think that the reason may be that the three Gaussian kernels are independent one of another? If so, propose an improved kernel, e.g. propose an alternative way of combining the three Gaussian kernels described above.}
 
-Yes, that the three Gaussian kernels are independent may be the reason. For example, if a datapoint has a high value from the time kernel but low values from the other two kernels, it may give a skewed representation of the predicted time at that point. A better solution could be instead of summing the kernels, but to multiply them. This gives a better representation in the data since all three kernels must be of high values to predict higher temperatures. 
+Yes, that the three Gaussian kernels are independent may be the reason. For
+example, if a datapoint has a high value from the time kernel but low values
+from the other two kernels, it may give a skewed representation of the predicted
+time at that point. A better solution would be to multiply the kernels instead
+of summing them. This gives a better representation in the data since all three
+kernels must be of high values to predict higher temperatures. 
 
 \section{Results}
 
 \textbf{Using the way as instructed in the lab PM}
 
-('2013-07-04 04:00', 58.4274, 14.826, 4.01)
-('2013-07-04 06:00', 58.4274, 14.826, 4.37)
-('2013-07-04 08:00', 58.4274, 14.826, 4.86)
-('2013-07-04 10:00', 58.4274, 14.826, 5.34)
-('2013-07-04 12:00', 58.4274, 14.826, 5.67)
-('2013-07-04 14:00', 58.4274, 14.826, 5.78)
-('2013-07-04 16:00', 58.4274, 14.826, 5.67)
-('2013-07-04 18:00', 58.4274, 14.826, 5.45)
-('2013-07-04 20:00', 58.4274, 14.826, 5.2)
-('2013-07-04 22:00', 58.4274, 14.826, 5.04)
-('2013-07-04 24:00', 58.4274, 14.826, 5.01)
+('2013-07-04 04:00', 58.4274, 14.826, 4.01) \\
+('2013-07-04 06:00', 58.4274, 14.826, 4.37) \\
+('2013-07-04 08:00', 58.4274, 14.826, 4.86) \\
+('2013-07-04 10:00', 58.4274, 14.826, 5.34) \\
+('2013-07-04 12:00', 58.4274, 14.826, 5.67) \\
+('2013-07-04 14:00', 58.4274, 14.826, 5.78) \\
+('2013-07-04 16:00', 58.4274, 14.826, 5.67) \\
+('2013-07-04 18:00', 58.4274, 14.826, 5.45) \\
+('2013-07-04 20:00', 58.4274, 14.826, 5.2) \\
+('2013-07-04 22:00', 58.4274, 14.826, 5.04) \\
+('2013-07-04 24:00', 58.4274, 14.826, 5.01) \\
 
 \textbf{Using the new way}
 
-('2013-07-04 04:00', 58.4274, 14.826, 12.96)
-('2013-07-04 06:00', 58.4274, 14.826, 13.79)
-('2013-07-04 08:00', 58.4274, 14.826, 14.71)
-('2013-07-04 10:00', 58.4274, 14.826, 15.55)
-('2013-07-04 12:00', 58.4274, 14.826, 16.13)
-('2013-07-04 14:00', 58.4274, 14.826, 16.32)
-('2013-07-04 16:00', 58.4274, 14.826, 16.12)
-('2013-07-04 18:00', 58.4274, 14.826, 15.64)
-('2013-07-04 20:00', 58.4274, 14.826, 15.04)
-('2013-07-04 22:00', 58.4274, 14.826, 14.43)
-('2013-07-04 24:00', 58.4274, 14.826, 13.89)
+('2013-07-04 04:00', 58.4274, 14.826, 12.96) \\
+('2013-07-04 06:00', 58.4274, 14.826, 13.79) \\
+('2013-07-04 08:00', 58.4274, 14.826, 14.71) \\
+('2013-07-04 10:00', 58.4274, 14.826, 15.55) \\
+('2013-07-04 12:00', 58.4274, 14.826, 16.13) \\
+('2013-07-04 14:00', 58.4274, 14.826, 16.32) \\
+('2013-07-04 16:00', 58.4274, 14.826, 16.12) \\
+('2013-07-04 18:00', 58.4274, 14.826, 15.64) \\
+('2013-07-04 20:00', 58.4274, 14.826, 15.04) \\
+('2013-07-04 22:00', 58.4274, 14.826, 14.43) \\
+('2013-07-04 24:00', 58.4274, 14.826, 13.89) \\
 
 
 \end{document}
