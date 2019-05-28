@@ -54,8 +54,8 @@ def gauss_kernel_time(in_time):
 
 
 # Width of guass
-h_distance = 70  # In km
-h_date = 7  # In days
+h_distance = 150  # In km
+h_date = 10  # In days
 h_time = 4*3600  # In seconds
 
 # Variables to prediction
