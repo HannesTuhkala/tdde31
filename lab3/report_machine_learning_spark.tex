@@ -77,14 +77,19 @@
 
 \textbf{Show that your choice for the kernels’ width is sensible, i.e. it gives more weight to closer points. Discuss why your definition of closeness is reasonable.}
 
-Our width variables are set to values that would favor closer points of data. h\_distance is set to 100 km, h\_date set to 30 days and h\_time set to 6 hours. Temperature further than 100 km away should not influence the temperature at the location \textit{that} much. (This is assuming that there is a station approximately 100km away from any location we test, which we assume to be true for our location, atleast.) Dates further than a month away shouldn't influence the forecast either, since it may be a different season or just in general, different temperatures at that time. For the time window, we picked 6 hours since around that time should influence the upcoming temperatures more, however it might be misguided since if temperature keeps increasing, then it might increase the predicated value as well. But that does not seem to be happening since by judging the results it increases and decreases (although not by that much variety).
+Our width variables are set to values that would favor closer points of data. h\_distance is set to 70 km, h\_date set to 7 days and h\_time set to 3 hours.
+Temperature further than 100 km away should not influence the temperature at the location \textit{that} much. (This is assuming that there is a station approximately 100km away from any location we test, which we assume to be true for our location, atleast.)
+Dates further than a month away shouldn't influence the forecast either, since it may be a different season or just in general, different temperatures at that time.
+For the time window, we picked 6 hours since around that time should influence the upcoming temperatures more, however it might be misguided since if temperature keeps increasing, then it might increase the predicated value as well.
+But that does not seem to be happening since by judging the results it increases and decreases (although not by that much variety).
 
 \textbf{It is quite likely that the predicted temperatures do not differ much from one another. Do you think that the reason may be that the three Gaussian kernels are independent one of another? If so, propose an improved kernel, e.g. propose an alternative way of combining the three Gaussian kernels described above.}
 
 Yes, that the three Gaussian kernels are independent may be the reason. For
 example, if a datapoint has a high value from the time kernel but low values
 from the other two kernels, it may give a skewed representation of the predicted
-time at that point. A better solution would be to multiply the kernels instead
+time at that point.
+A better solution would be to multiply the kernels instead
 of summing them. This gives a better representation in the data since all three
 kernels must be of high values to predict higher temperatures. 
 
@@ -106,16 +111,15 @@ kernels must be of high values to predict higher temperatures.
 
 \textbf{Multiplying the kernels instead}
 
-('2013-07-04 04:00', 58.4274, 14.826, 12.96) \\
-('2013-07-04 06:00', 58.4274, 14.826, 13.79) \\
-('2013-07-04 08:00', 58.4274, 14.826, 14.71) \\
-('2013-07-04 10:00', 58.4274, 14.826, 15.55) \\
-('2013-07-04 12:00', 58.4274, 14.826, 16.13) \\
-('2013-07-04 14:00', 58.4274, 14.826, 16.32) \\
-('2013-07-04 16:00', 58.4274, 14.826, 16.12) \\
-('2013-07-04 18:00', 58.4274, 14.826, 15.64) \\
-('2013-07-04 20:00', 58.4274, 14.826, 15.04) \\
-('2013-07-04 22:00', 58.4274, 14.826, 14.43) \\
-('2013-07-04 24:00', 58.4274, 14.826, 13.89) \\
-
+('2013-07-24 04:00', 58.4274, 14.826, 13.72) \\
+('2013-07-24 06:00', 58.4274, 14.826, 15.58) \\
+('2013-07-24 08:00', 58.4274, 14.826, 17.53) \\
+('2013-07-24 10:00', 58.4274, 14.826, 19.35) \\
+('2013-07-24 12:00', 58.4274, 14.826, 20.39) \\
+('2013-07-24 14:00', 58.4274, 14.826, 20.86) \\
+('2013-07-24 16:00', 58.4274, 14.826, 20.59) \\
+('2013-07-24 18:00', 58.4274, 14.826, 19.42) \\
+('2013-07-24 20:00', 58.4274, 14.826, 17.22) \\
+('2013-07-24 22:00', 58.4274, 14.826, 15.43) \\
+('2013-07-24 24:00', 58.4274, 14.826, 14.81) \\
 \end{document}
