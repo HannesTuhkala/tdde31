@@ -68,6 +68,7 @@ station_file = sc.textFile("/user/x_robsl/data/stations.csv")
 temp_file = sc.textFile("/user/x_robsl/data/temperature-readings.csv")
 
 stations = station_file.map(lambda line: line.split(";"))
+# Structure: (station, lat, lon)
 stations = stations.map(lambda x: (int(x[0]), float(x[3]), float(x[4]))).cache()
 
 temperatures = temp_file.map(lambda line: line.split(";"))
@@ -87,13 +88,13 @@ temperatures = temperatures.map(lambda x: (x[0], hav_map.value[x[0]], day_differ
 
 
 forecast = []
-# For every other hour between 4 am and 12 am..
+# For every other hour between 4 am and 12 am we predict the temperature.
+# Using the formula found in one of the slides.
 for i in range(4, 25, 2):
-
-    # Structure (i, value)
+    # Structure (i, value) and then collect on that
     forecast1 = temperatures.map(lambda x: (i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i))*x[4])).reduceByKey(lambda x, y: x + y).cache().collect()
 
-    # Structure (i, value)
+    # Structure (i, value) and then collect on that
     forecast2 = temperatures.map(lambda x: (i, gauss_kernel_sum(x[1], x[2], time_differences(x[3], i)))).reduceByKey(lambda x, y: x + y).cache().collect()
 
     # Make the date/time prettier and output it into console
