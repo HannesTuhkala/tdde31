@@ -61,7 +61,7 @@ h_time = 6*3600  # In seconds
 # Variables for prediction
 a_lat = 58.4274
 b_lon = 14.826
-date = "2013-12-24"
+date = "2013-07-24"
 
 
 station_file = sc.textFile("/user/x_hantu/data/stations.csv")
