@@ -77,24 +77,21 @@
 
 \textbf{Show that your choice for the kernels’ width is sensible, i.e. it gives more weight to closer points. Discuss why your definition of closeness is reasonable.}
 
-Our width variables are set to values that would favor closer points of data. h\_distance is set to 70 km, h\_date set to 7 days and h\_time set to 3 hours.
-Temperature further than 100 km away should not influence the temperature at the location \textit{that} much. (This is assuming that there is a station approximately 100km away from any location we test, which we assume to be true for our location, atleast.)
-Dates further than a month away shouldn't influence the forecast either, since it may be a different season or just in general, different temperatures at that time.
-For the time window, we picked 6 hours since around that time should influence the upcoming temperatures more, however it might be misguided since if temperature keeps increasing, then it might increase the predicated value as well.
-But that does not seem to be happening since by judging the results it increases and decreases (although not by that much variety).
+Our width variables are set to values that would favor closer points of data. h\_distance is set to 150 km, h\_date set to 10 days and h\_time set to 4 hours.
+Temperature further than 150 km away should not influence the temperature at the location \textit{that} much. (This is assuming that there is a station approximately 150km away from any location we test, which we assume to be true for our location, atleast.)
+Dates further than a 10 days away shouldn't influence the forecast either, since it may be different temperatures at that time.
+For the time window, we picked 4 hours since around that time should influence the upcoming temperatures more.
 
 \textbf{It is quite likely that the predicted temperatures do not differ much from one another. Do you think that the reason may be that the three Gaussian kernels are independent one of another? If so, propose an improved kernel, e.g. propose an alternative way of combining the three Gaussian kernels described above.}
 
-Yes, that the three Gaussian kernels are independent may be the reason. For
-example, if a datapoint has a high value from the time kernel but low values
+Yes, that the three Gaussian kernels are independent of each other may be the reason.
+For example, if a datapoint has a high value from the time kernel but low values
 from the other two kernels, it may give a skewed representation of the predicted
 time at that point.
 A better solution would be to multiply the kernels instead
-of summing them. This gives a better representation in the data since all three
-kernels must be of high values to predict higher temperatures. 
+of summing them. This gives a better representation in the data if all three kernels are high, then it is most likely that temperature.
 
 \section{Results}
-
 \textbf{Summing the kernels. The data is: Date, Latitude, Longitude, Predicted temperature.}
 
 ('2013-07-24 04:00', 58.4274, 14.826, 4.31) \\
