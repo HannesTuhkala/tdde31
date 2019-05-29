@@ -54,18 +54,17 @@ def gauss_kernel_time(in_time):
 
 
 # Width of guass
-h_distance = 50  # In km
-h_date = 5  # In days
-h_time = 2*3600  # In seconds
+h_distance = 150  # In km
+h_date = 10  # In days
+h_time = 4*3600  # In seconds
 
-# Variables for prediction
-a_lat = 58.4274  # Up to you
-b_lon = 14.826  # Up to you
-date = "2013-07-24"  # Up to you
+# Variables to prediction
+a_lat = 58.4274
+b_lon = 14.826
+date = "2013-07-24"
 
-
-station_file = sc.textFile("/user/x_robsl/data/stations.csv")
-temp_file = sc.textFile("/user/x_robsl/data/temperature-readings.csv")
+station_file = sc.textFile("/user/x_hantu/data/stations.csv")
+temp_file = sc.textFile("/user/x_hantu/data/temperature-readings.csv")
 
 stations = station_file.map(lambda line: line.split(";"))
 # Structure: (station, lat, lon)
