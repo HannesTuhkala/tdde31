@@ -2,8 +2,8 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext, Row
 from pyspark.sql import functions as F
 
-STAT_FILE = "/user/x_robsl/data/stations-Ostergotland.csv"
-TEMPERATURES_FILE = "/user/x_robsl/data/temperature-readings.csv"
+STAT_FILE = "/user/x_hantu/data/stations-Ostergotland.csv"
+TEMPERATURES_FILE = "/user/x_hantu/data/temperature-readings.csv"
 
 sc = SparkContext(appName = "exercise 6")
 sqlContext = SQLContext(sc)
@@ -39,10 +39,10 @@ min_readings = valid_readings.groupBy(['year', 'month', 'day', 'station']).agg(F
 min_max_readings = max_readings.join(min_readings, ['year', 'month', 'day', 'station'], 'inner')
 
 # Calculate the average of min+max
-min_max_readings = min_max_readings.withColumn('daily_average', (min_max_readings.max_temp + min_max_readings.min_temp)/2)
+min_max_readings = min_max_readings.withColumn('daily_average', (min_max_readings.max_temp + min_max_readings.min_temp)/2.0)
 
 # Calculate the monthly average
-monthly_average = min_max_readings.groupBy(['year', 'month', 'station']).agg(F.avg('daily_average').alias('avg_monthly_temp')).select('year', 'month', 'station', 'avg_monthly_temp')
+monthly_average = min_max_readings.groupBy(['year', 'month', 'station']).agg(F.avg('daily_average').alias('avg_monthly_temp2')).groupBy('year', 'month').agg(F.avg('avg_monthly_temp2').alias('avg_monthly_temp'))
 
 # Filter out the unwanted period for long-term monthly average
 long_term_monthly = monthly_average.where("year <= 1980")
